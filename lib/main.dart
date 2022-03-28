@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import './Screens/emergencyscreen.dart';
+import './Screens/set_numbers.dart';
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -23,10 +24,7 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-
   final String title;
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -68,7 +66,10 @@ class _MyHomePageState extends State<MyHomePage> {
       //   ),
       // ),
       floatingActionButton: FloatingActionButton(
-        onPressed: ()=>{debugPrint("button pressed")},
+        onPressed: ()=>{  Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const SetNumber()),
+        )},
         tooltip: 'Add',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
