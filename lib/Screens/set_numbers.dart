@@ -137,6 +137,7 @@ class _SetNumberState extends State<SetNumber> {
       ambulancenumber = prefs!.getInt('ambulance')!;
       firefighternumber = prefs!.getInt('firefighter')!;
       isLoading = false;
+      print(policenumber);
     });
   }
 }

@@ -1,10 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_sms/flutter_sms.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class screen extends StatelessWidget {
+
+bool isLoading = true;
+int? policenumber;
+int? ambulancenumber;
+int? firefighternumber;
+
+
+class screen extends StatefulWidget {
+
   @override
-  Widget build(BuildContext context) {
+  State<screen> createState() => _screenState();
+}
+
+class _screenState extends State<screen> {
+  @override
+  void initState() {
+    readNumber();
+  }
+
+    Widget build(BuildContext context) {
     // TODO: implement build
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -19,9 +37,18 @@ class screen extends StatelessWidget {
         ),
         Column(
           children: [
-            MainRow(text: "Ambulance"),
-            MainRow(text: "Firefighter"),
-            MainRow(text: "Police"),
+            MainRow(
+              text: "Ambulance",
+              phonenumber: ambulancenumber.toString(),
+            ),
+            MainRow(
+              text: "Firefighter",
+              phonenumber: firefighternumber.toString(),
+            ),
+            MainRow(
+              text: "Police",
+              phonenumber: policenumber.toString(),
+            ),
           ],
         )
       ],
@@ -30,71 +57,83 @@ class screen extends StatelessWidget {
 }
 
 class MainRow extends StatelessWidget {
-  MainRow({this.text});
+  MainRow({this.text, this.phonenumber});
   String? text;
+  String? phonenumber;
 
 
   @override
+
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(10.0),
       margin: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(5)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            child: Text(
-              "$text",
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
-          Container(
-            child: Row(
+      child:
+           Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(
-                    onPressed: () {
-                      _callNumber();
-                    },
-                    icon: Icon(
-                      Icons.call,
-                      color: Colors.blue,
-                    )),
-                SizedBox(
-                  width: 10.0,
-                ),
-                IconButton(
-                  onPressed: () {
-                    sending_SMS();
-                  },
-                  icon: Icon(
-                    Icons.messenger,
-                    color: Colors.blue,
+                Container(
+                  child: Text(
+                    "$text",
+                    style: TextStyle(fontSize: 20),
                   ),
-                )
+                ),
+                Container(
+                  child: Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            _callNumber(phonenumber!);
+                          },
+                          icon: Icon(
+                            Icons.call,
+                            color: Colors.blue,
+                          )),
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          sending_SMS();
+                        },
+                        icon: Icon(
+                          Icons.messenger,
+                          color: Colors.blue,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               ],
-            ),
-          ),
-        ],
-      ),
+            )
+
     );
   }
+
+
 }
+readNumber() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
 
-
-
-_callNumber() async {
-  String number = "9804332283";
+  policenumber = prefs.getInt('police')!;
+  ambulancenumber = prefs.getInt('ambulance')!;
+  firefighternumber = prefs.getInt('firefighter')!;
+  isLoading = false;
+  print(policenumber);
+}
+_callNumber(String numbers) async {
+  String number = numbers;
   await FlutterPhoneDirectCaller.callNumber(number);
 }
 
- sending_SMS() async {
+sending_SMS() async {
   String msg = "Test Message";
-  List<String> list_receipents = ["9804079529"];
-  String send_result = await sendSMS(message: msg, recipients: list_receipents)
-      .catchError((err) {
+  List<String> listReceipents = ["9804079529"];
+  String sendResult =
+      await sendSMS(message: msg, recipients: listReceipents).catchError((err) {
     print(err);
   });
-  print(send_result);
+  print(sendResult);
 }
