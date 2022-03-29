@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_sms/flutter_sms.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'set_numbers.dart';
 
 bool isLoading = true;
 int? policenumber;
@@ -20,6 +20,12 @@ class _screenState extends State<screen> {
   @override
   void initState() {
     readNumber();
+    // if(policenumber==0 ||ambulancenumber ==0||firefighternumber==0){
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(builder: (context) => const SetNumber()),
+    //   );
+    // }
   }
 
     Widget build(BuildContext context) {
@@ -117,10 +123,11 @@ class MainRow extends StatelessWidget {
 readNumber() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  policenumber = prefs.getInt('police')!;
-  ambulancenumber = prefs.getInt('ambulance')!;
-  firefighternumber = prefs.getInt('firefighter')!;
+  policenumber = prefs.getInt('police');
+  ambulancenumber = prefs.getInt('ambulance');
+  firefighternumber = prefs.getInt('firefighter');
   isLoading = false;
+
   print(policenumber);
 }
 _callNumber(String numbers) async {

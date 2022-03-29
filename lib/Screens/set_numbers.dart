@@ -133,11 +133,10 @@ class _SetNumberState extends State<SetNumber> {
   readNumber() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
-      policenumber = prefs!.getInt('police')!;
-      ambulancenumber = prefs!.getInt('ambulance')!;
-      firefighternumber = prefs!.getInt('firefighter')!;
+      policenumber = prefs!.getInt('police');
+      ambulancenumber = prefs!.getInt('ambulance');
+      firefighternumber = prefs!.getInt('firefighter');
       isLoading = false;
-      print(policenumber);
     });
   }
 }
